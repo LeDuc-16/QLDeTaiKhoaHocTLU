@@ -19,7 +19,7 @@ type NavItem = {
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
-// ĐÂY BẠN YÊU ƠI
+
 const navItems: NavItem[] = [
   {
     icon: <Home />,
