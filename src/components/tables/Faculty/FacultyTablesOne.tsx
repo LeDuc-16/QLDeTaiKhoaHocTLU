@@ -8,15 +8,17 @@ import {
 } from "../../ui/table";
 import Badge from "../../ui/badge/Badge";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
+import { useEffect,useState} from "react";
+import {fetchNCKHGiangVien} from "../../../api/NCKHGiangVienAPI";
 
 interface Faculty {
-    id: number;
-    nameProject: string;
-    facultyName: string;
-    status: string;
-    science: string;
-    startDate: string;
-    endDate: string;
+    maDeTai: number;
+    tenDeTai: string;
+    chuNhiemDeTai: string;
+    trangThai: string;
+    khoa: string;
+    ngayBatDau: string;
+    ngayKetThuc: string;
 }
 
 const tableData: Faculty[] = [
@@ -38,11 +40,37 @@ const tableData: Faculty[] = [
         startDate: "08/01/2005",
         endDate: "08/05/2005",
     },
-   
 ];
 
 export default function FacultyTablesOne() {
+    const [facultyData, setFacultyData] = useState<Faculty[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
     const navigate = useNavigate(); 
+
+    useEffect(() => {
+        // Thêm từ khóa async vào đây
+        const loadFacultyData = async () => {
+          try {
+            const data = await fetchNCKHGiangVien();
+            setFacultyData(data);
+          } catch (err) {
+    
+            setError(
+              err.message || "Không thể tải dữ liệu từ API. Vui lòng thử lại sau!"
+            );
+            console.error(err);
+          } finally {
+            setLoading(false);
+          }
+        };
+    
+        loadFacultyData();
+      }, []);
+
+    if (loading) return <div className="text-gray-500">Đang tải dữ liệu...</div>;
+    if (error) return <div className="text-red-500">{error}</div>;
 
     const handleViewDetail = (id: number) => {
         navigate(`/xem-chi-tiet-giang-vien`); 
@@ -97,38 +125,38 @@ export default function FacultyTablesOne() {
                         {/* Table Body */}
                         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                             {tableData.map((Faculty) => (
-                                <TableRow key={Faculty.id}>
+                                <TableRow key={Faculty.maDeTai}>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {Faculty.id}
+                                        {Faculty.maDeTai}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {Faculty.nameProject}
+                                        {Faculty.tenDeTai}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {Faculty.facultyName}
+                                        {Faculty.chuNhiemDeTai}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                         <Badge
                                             size="sm"
                                             color={
-                                                Faculty.status === "Đã hoàn thành"
+                                                Faculty.trangThai === "Đã hoàn thành"
                                                     ? "success"
-                                                    : Faculty.status === "Đang Thực Hiện"
+                                                    : Faculty.trangThai === "Đang Thực Hiện"
                                                     ? "warning"
                                                     : "error"
                                             }
                                         >
-                                            {Faculty.status}
+                                            {Faculty.trangThai}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        {Faculty.science}
+                                        {Faculty.khoa}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        {Faculty.startDate}
+                                        {Faculty.ngayBatDau}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                        {Faculty.endDate}
+                                        {Faculty.ngayKetThuc}
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400 flex ml-4 ">
                                         <div className="flex items-center gap-2">
