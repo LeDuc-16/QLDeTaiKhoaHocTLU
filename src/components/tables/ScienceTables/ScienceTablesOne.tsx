@@ -1,5 +1,6 @@
 // src/components/tables/ScienceTables/ScienceTablesOne.tsx
 import { useState, useEffect, use } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   TableBody,
@@ -8,7 +9,7 @@ import {
   TableRow,
 } from "../../ui/table";
 import { fetchScienceData } from "../../../api/scienceAPI.js";
-import { SidebarProvider } from '../../../context/SidebarContext.js';
+
 
 interface Science {
   id: number;
@@ -26,6 +27,7 @@ export default function ScienceTablesOne() {
   const [scienceData, setScienceData] = useState<Science[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadFacultyData = async () => {
@@ -45,8 +47,12 @@ export default function ScienceTablesOne() {
     loadFacultyData();
   }, []);
 
- if (loading) return <div className='text-gray-500'>"Đang tải dữ liệu ..."</div>
- if (error) return <div className='text-red-500'>{error}</div>
+  if (loading) return <div className='text-gray-500'>"Đang tải dữ liệu ..."</div>
+  if (error) return <div className='text-red-500'>{error}</div>
+
+  const handleViewDetail = (id: number) => {
+    navigate(`/chi-tiet-cong-bo-kh`)
+  };
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -83,26 +89,26 @@ export default function ScienceTablesOne() {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                LOẠI CÔNG BỐ
+                  LOẠI CÔNG BỐ
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                CHỈ MỤC KHOA HỌC
+                  CHỈ MỤC KHOA HỌC
                 </TableCell>
-                
+
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                NĂM CÔNG BỐ
+                  NĂM CÔNG BỐ
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                 HÀNH ĐỘNG
+                  HÀNH ĐỘNG
                 </TableCell>
               </TableRow>
             </TableHeader>
@@ -129,12 +135,13 @@ export default function ScienceTablesOne() {
                     {science.chiMucKhoaHoc}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                    {science.namCongBo}  
+                    {science.namCongBo}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                     <div className="flex items-center gap-2">
                       <button
                         className="text-blue-500 hover:text-blue-700"
+                        onClick={() => handleViewDetail(science.id)}
                       >
                         Chi tiết
                       </button>

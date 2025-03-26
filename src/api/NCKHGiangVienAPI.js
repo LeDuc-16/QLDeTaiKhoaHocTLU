@@ -12,6 +12,7 @@ const api = axios.create({
 // Hàm lấy danh sách tất cả NCKH của giảng viên (GET /api/NCKHGiangVien)
 export const fetchNCKHGiangVien = async () => {
   try {
+<<<<<<< HEAD
     // Lấy accessToken từ localStorage
     const token = localStorage.getItem("accessToken");
 
@@ -31,4 +32,23 @@ export const fetchNCKHGiangVien = async () => {
     const errorMessage = error.response?.data?.message || "Không thể tải dữ liệu từ API";
     throw new Error(errorMessage);
   }
+=======
+      const token = localStorage.getItem("accessToken"); 
+      const response = await api.get("/api/NCKH", {
+          headers: {
+              Authorization: token,
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching NCKHGiangVien data:", {
+      message: error.message,
+      response: error.response?.data,
+      status: error.response?.status,
+  });
+  const errorMessage = error.response?.data?.message || "Không thể tải dữ liệu từ API";
+  throw new Error(errorMessage);
+}
+>>>>>>> main
 };
