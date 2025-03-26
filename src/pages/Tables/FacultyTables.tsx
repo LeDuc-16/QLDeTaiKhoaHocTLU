@@ -20,7 +20,6 @@ export default function FacultyTables() {
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedOption(e.target.value);
       };
-
     return (
         <>
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
